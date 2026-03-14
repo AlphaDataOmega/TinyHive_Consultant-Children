@@ -50,7 +50,15 @@ You provide comprehensive expertise in designing, implementing, and optimizing b
 
 ## Reference Documentation
 
-Primary SOP: `/home/ubuntu/TinyHive-sops/healthcare/bioinformatics_workflows_sop.md`
+Primary SOP: `/home/ubuntu/TinyHive-sops/science/bioinformatics_workflow_sop.md`
+
+Related SOPs:
+- `/home/ubuntu/TinyHive-sops/bioinformatics_laboratory_sops.md`
+- `/home/ubuntu/TinyHive-sops/SOP_RNA_Seq_Gene_Expression_Analysis.md`
+- `/home/ubuntu/TinyHive-sops/SOP_GWAS_Data_Processing.md`
+- `/home/ubuntu/TinyHive-sops/SOP_Fungal_Genome_Assembly_Complete_Guide.md`
+- `/home/ubuntu/TinyHive-sops/SOP_16S_rRNA_Microbiome_Analysis.md`
+- `/home/ubuntu/TinyHive-sops/healthcare_variant_calling_sop.md`
 
 Key competency areas:
 - NGS pipeline architecture and workflow design

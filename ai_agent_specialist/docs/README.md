@@ -2,157 +2,199 @@
 
 ## Overview
 
-This consultant specializes in AI agent workflows, prompt engineering, and LLM-assisted development. The role encompasses designing structured procedures that enable AI agents to perform complex tasks reliably and reproducibly.
+This consultant specializes in designing and architecting agents for the TinyHive agentic OS. The role encompasses creating agent definitions, planning hierarchies, and ensuring all agent behaviors comply with SPINE governance.
 
-## Core Competencies
+## TinyHive Agent Architecture
 
-### Agent SOP Development
+### Agent Types
 
-Agent SOPs (Standard Operating Procedures) are markdown-based instruction sets that guide AI agents through sophisticated workflows. Key features include:
+| Type | Purpose | Examples |
+|------|---------|----------|
+| **MIND** | User interaction, task orchestration | ado_live_mind |
+| **BODY** | Task execution via controllers | ado_live_body |
+| **SPINE** | Governance, permissions, auditing | ado_live_spine |
+| **Consultants** | Domain expertise, advisory | sre_specialist, testing_engineer |
 
-- **Natural Language Workflows**: Plain English instructions requiring no prompt engineering expertise
-- **Parameterized Inputs**: Flexible reuse across different contexts and projects
-- **RFC 2119 Constraints**: MUST, SHOULD, MAY keywords for precise behavioral control
-- **Progress Tracking**: Document progress for transparency and resumability
-
-### Available SOP Types
-
-| SOP | Purpose | Use Cases |
-|-----|---------|-----------|
-| **codebase-summary** | Comprehensive codebase analysis and documentation | Project onboarding, documentation creation, system understanding |
-| **pdd** | Prompt-driven development methodology | Complex problem solving, architectural decisions, system design |
-| **code-task-generator** | Intelligent task breakdown and planning | Project planning, sprint preparation, requirement analysis |
-| **code-assist** | TDD-based code implementation | Feature development, bug fixes, refactoring |
-| **eval** | Automated evaluation workflow for AI agents | Evaluation planning, test data generation, result analysis |
-
-## Directory Structure Standards
+### Agent Hierarchy
 
 ```
-.agents/
-├── summary/               # codebase-summary output (always commit)
-│   └── *.md
-├── planning/              # pdd output (often worth committing)
-│   └── {project_name}/
-│       ├── rough-idea.md
-│       ├── idea-honing.md
-│       ├── research/
-│       ├── design/
-│       └── implementation/
-├── tasks/                 # code-task-generator output (optionally commit)
-│   └── {project_name}/
-│       └── step01/
-│           └── task-*.code-task.md
-└── scratchpad/            # code-assist working files (add to .gitignore)
-    └── {project_name}/
-        └── {task_name}/
+V (Human Owner)
+└── SPINE (Governance)
+    ├── Watchdog (monitoring)
+    ├── Healer (recovery)
+    ├── Auditor (compliance)
+    ├── Archivist (documentation)
+    ├── Guidance (advisory)
+    └── Permissions (lease management)
+└── MIND (Orchestration)
+    └── Consultants (domain experts)
+└── BODY (Execution)
+    ├── controller_hub
+    ├── controller_ssh
+    └── controller_playwright
 ```
 
-## SOP Format Specification
+## IDENTITY.md Format
+
+Every TinyHive agent requires an IDENTITY.md file with these sections:
 
 ### Required Sections
 
-1. **Title**: `# SOP Name`
-2. **Overview**: Concise description of purpose and use cases
-3. **Parameters**: Required and optional inputs with descriptions
-4. **Steps**: Workflow steps with RFC 2119 constraints
-5. **Examples**: Concrete usage scenarios (recommended)
-6. **Troubleshooting**: Common issues and resolutions (recommended)
-
-### RFC 2119 Keywords
-
-| Keyword | Meaning |
-|---------|---------|
-| **MUST** / **REQUIRED** | Absolute requirement |
-| **MUST NOT** / **SHALL NOT** | Absolute prohibition |
-| **SHOULD** / **RECOMMENDED** | Strong recommendation (may have exceptions) |
-| **SHOULD NOT** / **NOT RECOMMENDED** | Strong discouragement (may have exceptions) |
-| **MAY** / **OPTIONAL** | Truly optional behavior |
-
-### Constraint Best Practices
-
-Always provide context for negative constraints:
-
-**Good:**
 ```markdown
-- You MUST NOT use ellipses (...) because your output will be read aloud by text-to-speech
-- You MUST NOT run `git push` because this could publish unreviewed code
+# AGENT-NAME
+
+Agent ID: `path/agent_name`
+Parent: `parent_id` (PARENT_NAME)
+Role: brief role description
+
+## Purpose
+What this agent does and why it exists.
+
+## Responsibilities
+1. **Area** — Description of responsibility
+
+## Capabilities
+- What the agent can do
+
+## Constraints
+- What the agent must not do
+- Follow SPINE governance policies
 ```
 
-**Bad:**
+### Optional Sections
+
 ```markdown
-- You MUST NOT use ellipses
-- You MUST NOT run git push
+## Children
+| Agent | Role | Purpose |
+Table of child agents (for parent agents only)
+
+## Message Routing
+| Message Type | Route To |
+Routing table (for parent agents only)
+
+## Operating Pattern
+How the agent wakes and operates (reactive, cron, etc.)
+
+## Key Documents Managed
+Files this agent is responsible for (for Archivist-like roles)
 ```
 
-## Workflow Methodologies
+## Consultant Design Guidelines
 
-### Code Assist Workflow (TDD-Based)
+Consultants are stateless domain experts that MIND can summon to assist V with specialized tasks.
 
-1. **Setup**: Initialize project environment and directory structures
-2. **Explore Phase**: Analyze requirements, research patterns, create context document
-3. **Plan Phase**: Design test strategy, create implementation plan
-4. **Code Phase**: Implement tests first, then code following RED -> GREEN -> REFACTOR
-5. **Commit Phase**: Follow Conventional Commits, document in progress.md
+### Consultant Characteristics
 
-### Prompt-Driven Development (PDD)
+- **Advisory only** — Provide expertise and recommendations, no direct system access
+- **Stateless** — No persistent memory between invocations
+- **Domain-focused** — Deep expertise in a specific area
+- **SPINE-compliant** — All recommendations respect governance policies
 
-1. **Create Project Structure**: Set up directories for research, design, implementation
-2. **Initial Process Planning**: Clarify starting approach with user
-3. **Requirements Clarification**: Ask ONE question at a time, document in idea-honing.md
-4. **Research**: Document findings with mermaid diagrams and references
-5. **Iteration Checkpoint**: Summarize and confirm readiness to proceed
-6. **Detailed Design**: Create comprehensive design document
-7. **Implementation Plan**: Develop checklist-based implementation steps
-8. **Summary**: Present all artifacts and suggested next steps
+### Standard Consultant Structure
 
-### Evaluation Framework
-
-1. **Planning**: Analyze agent, design evaluation strategy, define metrics
-2. **Test Data Generation**: Generate test cases in JSONL format
-3. **Evaluation Execution**: Implement and run evaluation pipeline
-4. **Analysis and Reporting**: Generate comprehensive eval-report.md
-
-## Integration Options
-
-### MCP Server
-```bash
-strands-agents-sops mcp --sop-paths ~/custom-sops
+```
+consultants/children/{consultant_name}/
+├── IDENTITY.md          # Agent definition
+└── docs/
+    └── README.md        # Detailed documentation
 ```
 
-### Anthropic Skills
-```bash
-strands-agents-sops skills --output-dir ./skills
+### Responsibility Categories
+
+1. **Analysis** — Examine situations, provide assessments
+2. **Planning** — Create strategies, develop approaches
+3. **Guidance** — Advise on best practices, recommend actions
+4. **Documentation** — Help structure and write documents
+5. **Review** — Evaluate work, identify issues
+
+## Workflow Design Patterns
+
+### Reactive Agents
+
+Wake when messaged by parent or another agent:
+
+```markdown
+## Operating Pattern
+- Primarily reactive — wakes when queried by other agents or parent
+- Responds to specific message types routed by parent
 ```
 
-### Cursor IDE
-```bash
-strands-agents-sops commands --type cursor --output-dir .cursor/commands
+### Cron-Based Agents
+
+Wake on schedule for autonomous tasks:
+
+```markdown
+## Operating Pattern
+- Wakes every {interval} via cron
+- Performs {task}, reports findings to parent
+- Escalates {conditions} to parent for V approval
 ```
 
-### Python SDK
-```python
-from strands import Agent
-from strands_tools import editor, shell
-from strands_agents_sops import code_assist
+### Event-Driven Agents
 
-agent = Agent(
-    system_prompt=code_assist,
-    tools=[editor, shell]
-)
+Wake in response to system events:
+
+```markdown
+## Operating Pattern
+- Triggered by {event_type} events
+- Processes event, takes action within lease permissions
+- Logs all actions to lease chain
+```
+
+## Lease Integration
+
+Agents requiring elevated permissions must request leases through the Permissions agent.
+
+### Lease Request Pattern
+
+1. Agent identifies need for elevated permission
+2. Agent sends lease request to parent
+3. Parent routes to SPINE → Permissions
+4. Permissions evaluates against policy
+5. If within threshold: auto-approve
+6. If above threshold: escalate to V
+7. Lease granted with expiration, logged to chain
+
+### Constraint Examples
+
+```markdown
+## Constraints
+- Cannot execute shell commands without active lease
+- Must request lease for file modifications outside docs/
+- Lease requests must include justification
+- Follow SPINE governance policies
+```
+
+## Integration with TinyHive Core
+
+### Controller Integration
+
+Agents in BODY execute tasks via controllers:
+
+| Controller | Purpose |
+|------------|---------|
+| controller_hub | Central task routing |
+| controller_ssh | Remote shell execution |
+| controller_playwright | Browser automation |
+| controller_push | Notifications |
+| controller_telegram | Telegram messaging |
+
+### Message Flow
+
+```
+V → MIND → routes to appropriate agent/consultant
+         → BODY for execution tasks
+         → SPINE for governance questions
+
+Agent → Parent → SPINE (for lease requests)
+              → V (for escalations)
 ```
 
 ## Best Practices
 
-1. **Keep Steps Focused**: Each step accomplishes one clear objective
-2. **Use Clear Constraints**: Be specific about requirements vs recommendations
-3. **Provide Examples**: Show concrete usage for complex workflows
-4. **Natural Language**: Write descriptions that are easy to understand
-5. **Specify Artifacts**: Include file paths for all created artifacts
-6. **Include Troubleshooting**: Anticipate common issues with resolution steps
-
-## References
-
-- [Strands Agents Documentation](https://strandsagents.com/)
-- [RFC 2119 Keywords](https://datatracker.ietf.org/doc/html/rfc2119)
-- [Model Context Protocol](https://modelcontextprotocol.io/)
-- [Anthropic Skills](https://support.claude.com/en/articles/12512176-what-are-skills)
+1. **Clear boundaries** — Each agent has a focused purpose
+2. **Explicit constraints** — State what agents cannot do
+3. **Escalation paths** — Always define how to escalate to parent/V
+4. **SPINE compliance** — All agents follow governance policies
+5. **Minimal permissions** — Request only necessary lease scopes
+6. **Documentation** — Maintain docs alongside IDENTITY.md
